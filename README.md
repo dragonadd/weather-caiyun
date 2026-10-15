@@ -1,6 +1,8 @@
-# ☀️ 彩云天气网页版（Cloudflare Worker）
+# ☀️ 自用彩云天气网页版（Cloudflare Worker）
 
 一个把**彩云天气**接口包装成可直接访问网页的 Cloudflare Worker：首页实时天气、未来 24 小时 / 多天预报、城市切换，另提供 `/api/cities`、`/api/weather` 两个接口，前端与后端全部内嵌在单个 Worker 中。
+
+（只能看自己添加上去的城市、经纬度地点）
 
 > [!CAUTION]
 > **请勿把 `CITIES`、`CAIYUN_TOKEN` 等环境变量明文写进仓库。** 它们应在 Cloudflare 控制台配置（Settings → Variables and Secrets），代码仓库中只保留引用说明。
@@ -52,7 +54,6 @@
 <summary><code><strong>「 Pages + Git 部署文字教程 」</strong></code></summary>
 
 
-
 > [!NOTE]
 > 此方案将文件命名为 **`_worker.js`** 放在 Pages 项目构建输出目录，Pages 会将其当作完整 Worker 运行。仅在坚持使用 Pages 时采用。
 
@@ -99,25 +100,6 @@
 > city1 = 116.4074,39.9042
 > city2 = 114.0579,22.5431
 > ```
-
-## 🔧 关于 Error 1101 的修复
-
-早期版本 `sortCities()` 使用了 `a.name.localeCompare(b.name, 'zh-Hans-CN')`。该调用依赖 **ICU 地区数据**，而 Cloudflare Workers 运行时缺少对应数据时会抛出：
-
-```
-RangeError: Incorrect locale information provided
-```
-
-结果是**所有请求路径**（包括最简单的 `/api/cities`）都返回 **Error 1101 / HTTP 500**。
-
-本版本已做三处修复：
-
-1. **`sortCities()`** 改用纯代码点比较，不再调用 `localeCompare`；
-2. **`fetch` 外层加 try/catch 兜底**：任何异常会以明文返回（`Worker 内部错误: <原因>`），便于排查，不再笼统返回 1101；
-3. **HTML 城市列表注入改为函数式 `replace`**：避免城市名里的 `$&`、`$'` 被当成替换模式而损坏页面。
-
-> [!TIP]
-> 若部署后页面仍报错，直接在浏览器打开地址查看返回的明文错误信息，即可快速定位问题。
 
 ## ⚠️ 注意事项
 
