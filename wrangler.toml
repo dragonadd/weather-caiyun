@@ -1,0 +1,8 @@
+# Cloudflare Workers 部署配置（Workers + Git 集成）
+name = "weather"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+# 环境变量请在 CF 控制台配置（Settings -> Variables and Secrets），不要提交进仓库：
+#   CITIES       = [{"name":"北京","lng":116.4074,"lat":39.9042},{"name":"深圳","lng":114.0579,"lat":22.5431}]
+#   CAIYUN_TOKEN = <你的彩云天气 Token>
