@@ -4,6 +4,8 @@
 
 （只能看自己添加上去的城市、经纬度地点）
 
+![自用彩云天气网页版](./caiyun.jpg)
+
 > [!CAUTION]
 > **请勿把 `CITIES`、`CAIYUN_TOKEN` 等环境变量明文写进仓库。** 它们应在 Cloudflare 控制台配置（Settings → Variables and Secrets），代码仓库中只保留引用说明。
 
